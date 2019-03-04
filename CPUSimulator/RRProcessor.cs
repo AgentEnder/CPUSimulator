@@ -30,6 +30,7 @@
                     {
                         activeJobIdx = 0;
                     }
+                    timer = 0;
                 }
                 else if (timer >= timeQuantum)
                 {

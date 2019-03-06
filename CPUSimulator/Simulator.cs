@@ -42,19 +42,22 @@ namespace CPUSimulator
             }
             Console.WriteLine("\n\n" +
                               "-----------------------------------------------\n" +
-                              "SIMULATOR OUTPUT for " + processor.GetType().ToString() + "\n" +
+                              "SIMULATOR OUTPUT for " + processor.GetType().ToString().Split('.')[1] + "\n" +
                               "-----------------------------------------------");
             int totalTurnaround = 0;
             int totalWaiting = 0;
 
-            foreach (var job in processor.GetFinishedJobs())
+            Console.WriteLine(String.Format("{0,5}|{1,15}|{2,15}|{3,15}|{4,15}", "JobID", "Arrival Time", "Complete Time", "Waiting", "Turnaround"));
+            foreach (Job job in processor.GetFinishedJobs())
             {
-                Console.WriteLine("Job " + job.JobID.ToString() + ": Arrived at " + job.ArrivalTime + ", finished at " + job.CompletionTime);
                 int turnaround = (job.CompletionTime - job.ArrivalTime);
                 totalTurnaround += turnaround;
                 int waiting = turnaround - job.Cycles;
                 totalWaiting += waiting;
-                Console.WriteLine("Turnaround Time: " + turnaround.ToString() + ", Waiting: " + waiting.ToString());
+                Console.WriteLine(String.Format("{0,5}|{1,15}|{2,15}|{3,15}|{4,15}", job.JobID, job.ArrivalTime, job.CompletionTime, waiting, turnaround));
+                //Console.WriteLine("Job " + job.JobID.ToString() + ": Arrived at " + job.ArrivalTime + ", finished at " + job.CompletionTime);
+                
+                //Console.WriteLine("Turnaround Time: " + turnaround.ToString() + ", Waiting: " + waiting.ToString());
             }
 
             Console.WriteLine("\n===Averages===\n" +

@@ -11,6 +11,7 @@ namespace CPUSimulator
         public override void Cycle()
         {
             cpuTime += cycleTime;
+            waitingJobs.Sort((x, y) => x.CyclesRemaining.CompareTo(y.CyclesRemaining)); //Sorting the list every frame is inoptimal, a priority queue would be MUCH better.
             Job job = GetActiveJob();
             if (job != null)
             {
@@ -19,7 +20,6 @@ namespace CPUSimulator
                     finishedJobs.Add(job);
                     waitingJobs.Remove(job);
                 }
-                waitingJobs.Sort((x, y) => x.CyclesRemaining.CompareTo(y.CyclesRemaining)); //Sorting the list every frame is inoptimal, a priority queue would be MUCH better.
             }
         }
     }

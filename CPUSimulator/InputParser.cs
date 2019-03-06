@@ -35,6 +35,7 @@ namespace CPUSimulator
         {
             Console.Write("Enter the filepath: ");
             string path = Console.ReadLine();
+            path = path.Replace("\"", "");
             ParseFromFile(path);
         }
 

@@ -13,7 +13,7 @@
         public override void Cycle()
         {
             cpuTime += cycleTime;
-            timer += cpuTime;
+            timer += cycleTime;
 
             Job job = GetActiveJob();
             if (job != null)

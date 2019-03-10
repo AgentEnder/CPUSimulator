@@ -1,9 +1,13 @@
-﻿namespace CPUSimulator
+﻿using System;
+using System.Collections.Generic;
+
+namespace CPUSimulator
 {
     class RRProcessor : Processor
     {
         private int timeQuantum = 4;
         private int timer = 0;
+        private Queue<Job> secondaryWaiting = new Queue<Job>();
 
         public RRProcessor(int quantum)
         {
@@ -12,32 +16,40 @@
 
         public override void Cycle()
         {
+            Job job;
+            if (timer >= timeQuantum)
+            {
+                timer = 0;
+                if (waitingJobs.Count > 0)
+                {
+                    job = GetActiveJob();
+                    secondaryWaiting.Enqueue(job);
+                    waitingJobs.Remove(job);
+                }
+            }
             cpuTime += cycleTime;
             timer += cycleTime;
 
-            Job job = GetActiveJob();
+            if (waitingJobs.Count <= 0 && secondaryWaiting.Count > 0)
+            {
+                waitingJobs.AddRange(secondaryWaiting);
+                secondaryWaiting.Clear();
+            }
+
+            job = GetActiveJob();
             if (job != null)
             {
+                //PrintStatus();
+                
                 if (job.Cycle(cpuTime)) //Returns true if job is finished
                 {
                     finishedJobs.Add(job);
                     waitingJobs.Remove(job);
-                    if (waitingJobs.Count > 0)
-                    {
-                        activeJobIdx = (activeJobIdx) % waitingJobs.Count; //This works because removing the current job shifts all jobs after it to the left   
-                    }                                                      //effectively incrementing activeJobIdx, the modulus handles when the last job is removed 
-                    else
-                    {
-                        activeJobIdx = 0;
-                    }
-                    timer = 0;
-                }
-                else if (timer >= timeQuantum)
-                {
-                    activeJobIdx = (activeJobIdx + 1) % waitingJobs.Count;
+                    
                     timer = 0;
                 }
             }
+
         }
     }
 }

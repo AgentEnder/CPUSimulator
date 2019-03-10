@@ -33,15 +33,5 @@ namespace CPUSimulator
             }
             
         }
-
-        public int GetProcessorTime()
-        {
-            return cpuTime;
-        }
-
-        public List<Job> GetFinishedJobs()
-        {
-            return finishedJobs;
-        }
     }
 }

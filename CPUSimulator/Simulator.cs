@@ -26,9 +26,9 @@ namespace CPUSimulator
 
         public void Simulate()
         {
-            int time = 0;
             while (processor.GetFinishedJobs().Count < jobs)
             {
+                int time = processor.GetProcessorTime();
                 if (simJobs.ContainsKey(time))
                 {
                     simJobs[time].Sort((x, y) => x.Item2.CompareTo(y.Item2));
@@ -38,7 +38,6 @@ namespace CPUSimulator
                     }
                 }
                 processor.Cycle();
-                time++;
             }
             Console.WriteLine("\n\n" +
                               "-----------------------------------------------\n" +
@@ -48,7 +47,9 @@ namespace CPUSimulator
             int totalWaiting = 0;
 
             Console.WriteLine(String.Format("{0,5}|{1,15}|{2,15}|{3,15}|{4,15}", "JobID", "Arrival Time", "Complete Time", "Waiting", "Turnaround"));
-            foreach (Job job in processor.GetFinishedJobs())
+            List<Job> completed = processor.GetFinishedJobs();
+            completed.Sort((x, y) => x.JobID.CompareTo(y.JobID));
+            foreach (Job job in completed)
             {
                 int turnaround = (job.CompletionTime - job.ArrivalTime);
                 totalTurnaround += turnaround;

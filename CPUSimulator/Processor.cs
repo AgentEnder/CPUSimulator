@@ -44,5 +44,10 @@ namespace CPUSimulator
         {
             return finishedJobs;
         }
+
+        public void PrintStatus()
+        {
+            Console.WriteLine($"Time {cpuTime}: Working on {GetActiveJob().JobID}, {GetActiveJob().CyclesRemaining } remain");
+        }
     }
 }
